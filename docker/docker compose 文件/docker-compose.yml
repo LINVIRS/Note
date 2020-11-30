@@ -1,0 +1,31 @@
+version: '3.3' #指定版本 可以向下兼容
+services:
+  wlapp: #定义的 服务 名称
+    build: .  #docker 构建 类似于 命令 docker build -t .
+    image: wlapp
+    depends_on: #指定依赖
+      - db #数据库依赖
+      - redis #redis服务
+    ports: #暴露端口
+      - "8081:8081"
+    restart: always #总是启动
+    environment:  #制定环境  这里指定 mysql环境
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: thp
+      WORDPRESS_DB_PASSWORD: thp_health
+      WORDPRESS_DB_NAME: thp_health
+  redis: #redis 环境
+    image: "redis:alpine"
+
+  db: #mysql
+    image: mysql:5.7
+    volumes: #容器挂载技术  注意 要在顶部申明 volume
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: thp_health
+      MYSQL_USER: thp
+      MYSQL_PASSWORD: thp_health
+volumes:
+  db_data: {}

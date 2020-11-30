@@ -1,0 +1,1 @@
+java -jar /usr/local/idea/1.jar
